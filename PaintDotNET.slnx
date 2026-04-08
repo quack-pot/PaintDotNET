@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="PaintDotNET.Api/PaintDotNET.Api.csproj" />
+  <Project Path="PaintDotNET.Application/PaintDotNET.Application.csproj" />
+  <Project Path="PaintDotNET.Core/PaintDotNET.Core.csproj" />
+  <Project Path="PaintDotNET.Tests/PaintDotNET.Tests.csproj" />
+</Solution>
