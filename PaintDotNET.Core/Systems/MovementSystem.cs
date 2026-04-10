@@ -1,14 +1,15 @@
+using PaintDotNET.Core.DataStructs;
 using PaintDotNET.Core.Entities;
+using PaintDotNET.Core.Enums;
 using PaintDotNET.Core.Math;
 using PaintDotNET.Core.Meta;
-using PaintDotNET.Core.Stores;
 
 namespace PaintDotNET.Core.Systems;
 
-public class MovementSystem(GameState injected_game_state, PlayersStore injected_players)
+public class MovementSystem(GameState injected_game_state, ItemsStore<Player> injected_players)
 {
     private readonly GameState game_state = injected_game_state;
-    private readonly PlayersStore players = injected_players;
+    private readonly ItemsStore<Player> players = injected_players;
 
     public void UpdatePlayers(float delta_time)
     {
@@ -28,6 +29,19 @@ public class MovementSystem(GameState injected_game_state, PlayersStore injected
                 GameRules.PLAYER_SIZE_RADIUS,
                 upper_y
             );
+        }
+    }
+
+    public void PickPlayerSpawn(ref Player player)
+    {
+        player.position.Y = Random.Shared.NextSingle() * game_state.grid_height;
+
+        float half_grid_width = 0.5f * game_state.grid_width;
+        player.position.X = Random.Shared.NextSingle() * half_grid_width;
+
+        if (player.team == Team.BLUE_TEAM)
+        {
+            player.position.X += half_grid_width;
         }
     }
 }

@@ -12,6 +12,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PaintDotNET.Application\PaintDotNET.Application.csproj" />
+    <ProjectReference Include="..\PaintDotNET.Core\PaintDotNET.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="DTOs\" />
+    <Folder Include="Hubs\" />
   </ItemGroup>
 
 </Project>

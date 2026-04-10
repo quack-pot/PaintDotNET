@@ -1,15 +1,15 @@
+using PaintDotNET.Core.DataStructs;
 using PaintDotNET.Core.Entities;
 using PaintDotNET.Core.Enums;
 using PaintDotNET.Core.Math;
 using PaintDotNET.Core.Meta;
-using PaintDotNET.Core.Stores;
 
 namespace PaintDotNET.Core.Systems;
 
-public class PaintSystem(GameState injected_game_state, PlayersStore injected_players)
+public class PaintSystem(GameState injected_game_state, ItemsStore<Player> injected_players)
 {
     private readonly GameState game_state = injected_game_state;
-    private readonly PlayersStore players = injected_players;
+    private readonly ItemsStore<Player> players = injected_players;
 
     public void UpdatePainting(float delta_time)
     {
@@ -32,15 +32,22 @@ public class PaintSystem(GameState injected_game_state, PlayersStore injected_pl
 
             ref Tile tile = ref game_state.GetTile(grid_x, grid_y);
             
-            if (tile.team == player.team || tile.team == Team.NONE || tile.strength == 0u)
+            if (tile.team == player.team)
             {
                 tile.team = player.team;
-                tile.strength = MathGen.Max(tile.strength + 1u, GameRules.MAX_PAINT_STRENGTH);
+                tile.strength = MathGen.Min(tile.strength + 1, GameRules.MAX_PAINT_STRENGTH);
                 continue;
             }
+            else
+            {
+                tile.strength--;    
+            }
 
-            tile.strength = MathGen.Min(tile.strength - 1u, 0u);
-            tile.team = tile.strength == 0u ? Team.NONE : tile.team;
+            if (tile.strength <= 0)
+            {
+                tile.team = player.team;
+                tile.strength = 1;
+            }
         }
     }
 }

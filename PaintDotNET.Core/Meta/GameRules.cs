@@ -8,6 +8,10 @@ public class GameRules
 
     public const string GAME_TIME_FORMAT = @"mm\:ss";
 
-    public const uint MAX_PAINT_STRENGTH = 3u;
+    public const int MAX_PAINT_STRENGTH = 3;
 
+    public const uint TILE_GRID_WIDTH = 64u;
+    public const uint TILE_GRID_HEIGHT = 64u;
+
+    public const uint GAME_TIME_SECS = 60u;
 }
