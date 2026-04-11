@@ -1,0 +1,28 @@
+---
+interface Props {
+    id?: string;
+    class?: string;
+    style?: astroHTML.JSX.CSSProperties;
+}
+---
+
+<ui-manager
+    id={Astro.props.id}
+    class={Astro.props.class}
+    style={Astro.props.style}
+>
+    <h1>HELLO WORLD</h1>
+</ui-manager>
+
+<script src="../scripts/components/ui_manager.ts" />
+
+<style>
+    ui-manager {
+        width: 100vw;
+        height: 100vh;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>

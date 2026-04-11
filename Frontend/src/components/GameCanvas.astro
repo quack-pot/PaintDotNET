@@ -1,0 +1,28 @@
+---
+interface Props {
+    id?: string;
+    class?: string;
+    style?: astroHTML.JSX.CSSProperties;
+}
+---
+
+<game-canvas
+    id={Astro.props.id}
+    class={Astro.props.class}
+    style={Astro.props.style}
+/>
+
+<script src="../scripts/components/game_canvas.ts" />
+
+<style>
+    game-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -50;
+
+        display: block;
+        width: 100vw;
+        height: 100vh;
+    }
+</style>

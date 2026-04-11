@@ -1,12 +1,12 @@
 ---
+import GameCanvas from "../components/GameCanvas.astro";
+import UIManager from "../components/UIManager.astro";
 import RootLayout from "../layouts/RootLayout.astro";
-
 ---
 
 <RootLayout>
-    <game-canvas id="primary-game-canvas" />
-
-    <h1 style="color: red;">Hello World!</h1>
+    <GameCanvas id="primary-game-canvas" />
+    <UIManager id="primary-ui-manager" />
 
     <script src="../scripts/main.ts"></script>
 </RootLayout>
