@@ -1,0 +1,27 @@
+---
+import "../styles/globals.css";
+
+interface Props {
+    id?: string;
+    class?: string;
+    style?: astroHTML.JSX.CSSProperties;
+}
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>PaintDotNET</title>
+	</head>
+	<body
+        id={Astro.props.id}
+        class={Astro.props.class}
+        style={Astro.props.style}
+    >
+		<slot/>
+	</body>
+</html>
