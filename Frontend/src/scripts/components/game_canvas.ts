@@ -58,6 +58,10 @@ export default class GameCanvas extends HTMLElement {
         })
     );
 
+    private other_players: THREE.Mesh[] = [];
+    private player_id_to_index: Map<number, number> = new Map<number, number>()
+    private player_index_to_id: Map<number, number> = new Map<number, number>()
+
     private last_frame_time: number = Date.now() * 0.001;
 
     constructor() {
@@ -92,6 +96,74 @@ export default class GameCanvas extends HTMLElement {
 
         this.onResize();
         window.addEventListener("resize", this.onResize.bind(this));
+    }
+
+    public addOtherPlayer(id: number, is_red_team: boolean, initial_x: number, initial_y: number): void {
+        const existing_index: number | undefined = this.player_id_to_index.get(id);
+        if (existing_index !== undefined) {
+            const existing_player: THREE.Mesh = this.other_players[existing_index];
+
+            existing_player.position.setX(initial_x * TILE_SIZE);
+            existing_player.position.setZ(initial_y * TILE_SIZE);
+
+            (existing_player.material as THREE.MeshStandardMaterial).color = new THREE.Color(
+                is_red_team ? RED_PLAYER_COLOR : BLUE_PLAYER_COLOR
+            );
+
+            return;
+        }
+
+        const new_index: number = this.other_players.length;
+
+        const new_player: THREE.Mesh = new THREE.Mesh(
+            new THREE.BoxGeometry(PLAYER_SIZE, PLAYER_SIZE, PLAYER_SIZE),
+            new THREE.MeshStandardMaterial({
+                color: is_red_team ? RED_PLAYER_COLOR : BLUE_PLAYER_COLOR,
+            })
+        );
+
+        new_player.position.setX(initial_x * TILE_SIZE);
+        new_player.position.setZ(initial_y * TILE_SIZE);
+        this.scene.add(new_player);
+
+        this.other_players.push(new_player);
+        this.player_id_to_index.set(id, new_index);
+        this.player_index_to_id.set(new_index, id);
+    }
+
+    public removeOtherPlayer(id: number): void {
+        const index: number | undefined = this.player_id_to_index.get(id);
+        if (index === undefined) {
+            return;
+        }
+
+        const last_index: number = this.other_players.length - 1;
+        const last_id: number = this.player_index_to_id.get(index)!;
+
+        this.player_id_to_index.delete(id);
+        this.player_index_to_id.delete(last_index);
+
+        this.scene.remove(this.other_players[index]);
+        this.other_players[index] = this.other_players[last_index];
+        this.other_players.pop();
+
+        if (id === last_id) {
+            return;
+        }
+
+        this.player_id_to_index.set(last_id, index);
+        this.player_index_to_id.set(index, last_id);
+    }
+
+    public updateOtherPlayer(id: number, new_x: number, new_y: number): void {
+        const index: number | undefined = this.player_id_to_index.get(id);
+        if (index === undefined) {
+            return;
+        }
+
+        const player: THREE.Mesh = this.other_players[index];
+        player.position.setX(new_x * TILE_SIZE);
+        player.position.setZ(new_y * TILE_SIZE);
     }
 
     public updatePlayerTeam(is_red_team: boolean): void {
