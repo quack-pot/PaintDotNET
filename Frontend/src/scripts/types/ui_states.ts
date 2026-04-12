@@ -1,0 +1,8 @@
+export enum UIState {
+    MAIN_MENU,
+    START_GAME_MENU,
+    WAITING_ON_HOST,
+    GAME_HUD,
+    GAME_OVER_RESULT,
+    GAME_OVER_HOST
+}

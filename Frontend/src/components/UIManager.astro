@@ -1,4 +1,10 @@
 ---
+import { Image } from 'astro:assets';
+import { UIState } from '../scripts/types/ui_states';
+import UIPanel from './UIPanel.astro';
+
+import title_image from "../assets/TitleImage.svg";
+
 interface Props {
     id?: string;
     class?: string;
@@ -11,18 +17,107 @@ interface Props {
     class={Astro.props.class}
     style={Astro.props.style}
 >
-    <h1>HELLO WORLD</h1>
+    <UIPanel
+        state={UIState.MAIN_MENU}
+        class="faded-center-panel flex-col align-center justify-center"
+    >
+        <div class="flex align-center">
+            <Image src={title_image} alt="PaintDotNET" loading="eager" style="width:16rem; height: auto;" />
+            <h1 style="font-size: 4rem;">PaintDotNET</h1>
+        </div>
+
+        <br />
+
+        <button id="main-menu-create-game-btn">
+            Create Game
+        </button>
+
+        <br />
+
+        <div class="flex align-center">
+            <input class="text-input" type="number" placeholder="Game ID..." />
+            <button id="main-menu-join-game-btn">
+                Join Game
+            </button>
+        </div>
+    </UIPanel>
+
+    <UIPanel
+        state={UIState.WAITING_ON_HOST}
+        class="faded-center-panel flex align-center justify-center"
+    >
+        <h1>Waiting for Host to Start Game...</h1>
+    </UIPanel>
+
+    <UIPanel
+        state={UIState.START_GAME_MENU}
+        class="faded-center-panel flex-col align-center justify-center"
+    >
+        <h1>Game Lobby</h1>
+
+        <br />
+
+        <h2 id="start-game-id">Game ID: 1234567890</h2>
+        <h2 id="start-game-player-count">Player Count: 1</h2>
+
+        <br />
+        
+        <button id="start-game-btn">
+            Start Game
+        </button>
+    </UIPanel>
+
+    <UIPanel
+        state={UIState.GAME_OVER_RESULT}
+        class="faded-center-panel flex-col align-center justify-center"
+    >
+        <h1 id="game-over-title">Red Team Victory!</h1>
+
+        <br />
+
+        <h2 id="game-over-red-percent" style="color: #ffaaaa;">Red: 50%</h2>
+        <h2 id="game-over-blue-percent" style="color: #aaaaff;">Blue: 30%</h2>
+        <h2 id="game-over-none-percent" style="color: #aaaaaa;">None: 10%</h2>
+    </UIPanel>
+
+    <UIPanel
+        state={UIState.GAME_OVER_HOST}
+        class="faded-center-panel flex-col align-center justify-center"
+    >
+        <h1 id="game-over-host-title">Red Team Victory!</h1>
+
+        <br />
+
+        <h2 id="game-over-host-red-percent" style="color: #ffaaaa;">Red: 50%</h2>
+        <h2 id="game-over-host-blue-percent" style="color: #aaaaff;">Blue: 30%</h2>
+        <h2 id="game-over-host-none-percent" style="color: #aaaaaa;">None: 10%</h2>
+
+        <br />
+
+        <h2>Wanna Play Again?</h2>
+        <button id="game-over-play-again-btn">
+            Play Again
+        </button>
+    </UIPanel>
+
+    <UIPanel
+        state={UIState.GAME_HUD}
+        class="flex justify-between align-center text-center"
+    >
+        <h1 id="game-hud-red-percent" style="width: 33vw; color: #aa0000;">Red: 10%</h1>
+        <h1 id="game-hud-time" style="width: 33vw; color: #000000; font-size: xxx-large;">5:00</h1>
+        <h1 id="game-hud-blue-percent" style="width: 33vw; color: #0000aa;">Blue: 90%</h1>
+    </UIPanel>
 </ui-manager>
 
 <script src="../scripts/components/ui_manager.ts" />
 
 <style>
     ui-manager {
+        display: block;
+
         width: 100vw;
         height: 100vh;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        overflow: hidden;
     }
 </style>

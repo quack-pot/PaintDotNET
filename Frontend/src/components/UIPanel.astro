@@ -1,0 +1,22 @@
+---
+import type { UIState } from '../scripts/types/ui_states';
+
+
+interface Props {
+    id?: string;
+    class?: string;
+    style?: astroHTML.JSX.CSSProperties;
+
+    state: UIState;
+}
+---
+
+<div data-ui-state={Astro.props.state} style="display: none;">
+    <div
+        id={Astro.props.id}
+        class={Astro.props.class}
+        style={Astro.props.style}
+    >
+        <slot />
+    </div>
+</div>
