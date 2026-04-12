@@ -1,46 +1,39 @@
-using PaintDotNET.Api.DTOs;
-using PaintDotNET.Core.DataStructs;
-using PaintDotNET.Core.Meta;
+using Microsoft.AspNetCore.SignalR;
+using PaintDotNET.Api.Hubs;
 
 namespace PaintDotNET.Api.Services;
 
-using GameID = uint;
-using PlayerID = uint;
-
-public readonly struct GameData
+public class GameService(IHubContext<GameHub> injected_hub_ctx)
 {
-    public readonly PlayerID host_id;
-    public readonly GameSession session;
-}
+    private readonly IHubContext<GameHub> hub_ctx = injected_hub_ctx;
 
-public class GameService
-{
-    private readonly ItemsStore<GameData> games = new();
+    // private readonly ItemsStore<GameData> games = new();
 
-    public void UpdateGames()
+    public async Task UpdateGames()
     {
-        foreach (ref GameData game_data in games)
-        {
-            if (!game_data.session.IsRunning()) continue;
-            if (game_data.session.AttemptUpdate()) continue;
+        // foreach (ref GameData game_data in games)
+        // {
+        //     if (!game_data.session.IsRunning()) continue;
 
-            // TODO: Report game ending status
-        }
-    }
+        //     IClientProxy proxy = hub_ctx.Clients.Group(game_data.GetGameID().ToString());
 
-    public void ApplyPlayerInput(in PlayerInputDTO input)
-    {
-        if (!games.HasItem(input.GameID))
-        {
-            return;
-        }
+        //     if (game_data.session.AttemptUpdate())
+        //     {
+        //         await proxy.SendAsync(
+        //             GameHubEvents.GAME_UPDATE,
+        //             new GameUpdateDTO() // TODO: This should send something, only if changes are available...
+        //         );
 
-        games.GetItem(input.GameID).session.QueuePlayerInput(new(
-            input.PlayerID,
-            input.IsUpPressed,
-            input.IsDownPressed,
-            input.IsLeftPressed,
-            input.IsRightPressed
-        ));
+        //         continue;
+        //     }
+
+        //     await proxy.SendAsync(
+        //         GameHubEvents.GAME_OVER,
+        //         new GameOverDTO(
+        //             game_data.session.GetTeamCoverage(Core.Enums.Team.RED_TEAM),
+        //             game_data.session.GetTeamCoverage(Core.Enums.Team.BLUE_TEAM)
+        //         )
+        //     );
+        // }
     }
 }

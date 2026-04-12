@@ -1,7 +1,5 @@
 using PaintDotNET.Core.DataStructs;
 using PaintDotNET.Core.Entities;
-using PaintDotNET.Core.Enums;
-using PaintDotNET.Core.Math;
 using PaintDotNET.Core.Meta;
 
 namespace PaintDotNET.Core.Systems;

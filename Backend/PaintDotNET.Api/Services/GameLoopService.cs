@@ -10,7 +10,7 @@ public class GameLoopService(GameService injected_game_service) : BackgroundServ
     {
         while (!stopping_token.IsCancellationRequested)
         {
-            game_service.UpdateGames();
+            await game_service.UpdateGames();
             await Task.Delay(FRAME_TIME_MS, stopping_token);
         }
     }

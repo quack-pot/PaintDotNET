@@ -1,5 +1,4 @@
 using PaintDotNET.Core.Entities;
-using PaintDotNET.Core.Meta;
 using PaintDotNET.Core.Math;
 
 namespace PaintDotNET.Core.Systems;
@@ -12,7 +11,4 @@ public class GameClockSystem(GameState injected_game_state)
         => game_state.game_time_secs = MathGen.Max(0.0f, game_state.game_time_secs - delta_time);
 
     public bool IsGameStillGoing() => game_state.game_time_secs > 0.0f;
-
-    public string GetGameTimeString()
-        => TimeSpan.FromSeconds(game_state.game_time_secs).ToString(GameRules.GAME_TIME_FORMAT);
 }

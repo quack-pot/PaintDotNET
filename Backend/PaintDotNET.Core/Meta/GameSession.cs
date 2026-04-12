@@ -1,7 +1,7 @@
-using System.Collections.Concurrent;
 using System.Diagnostics;
 using PaintDotNET.Core.DataStructs;
 using PaintDotNET.Core.Entities;
+using PaintDotNET.Core.Enums;
 using PaintDotNET.Core.Math;
 using PaintDotNET.Core.Systems;
 
@@ -19,9 +19,10 @@ public class GameSession
     private readonly Stopwatch stopwatch = new();
     private float last_frame_time = 0.0f;
 
-    private bool is_running = false;
+    private uint red_team_player_count = 0u;
+    private uint blue_team_player_count = 0u;
 
-    private readonly ConcurrentQueue<PlayerInputData> player_input = new();
+    private bool is_running = false;
 
     public GameSession()
     {
@@ -70,19 +71,6 @@ public class GameSession
         float delta_time = current_frame_time - last_frame_time;
         last_frame_time = current_frame_time;
 
-        while (player_input.TryDequeue(out PlayerInputData input))
-        {
-            if (!players.HasItem(input.PlayerID))
-            {
-                continue;
-            }
-
-            ref Player player = ref players.GetItem(input.PlayerID);
-
-            player.input_direction.X = MathGen.GetAxis<float>(input.IsRightPressed, input.IsLeftPressed);
-            player.input_direction.Y = MathGen.GetAxis<float>(input.IsDownPressed, input.IsUpPressed);
-        }
-
         move_system.UpdatePlayers(delta_time);
         paint_system.UpdatePainting(delta_time);
         clock_system.TickGameClock(delta_time);
@@ -91,5 +79,63 @@ public class GameSession
         return is_running;
     }
 
-    public void QueuePlayerInput(in PlayerInputData input) => player_input.Enqueue(input);
+    public void ApplyPlayerInput(in PlayerInputData input)
+    {
+        if (!players.HasItem(input.PlayerID))
+        {
+            return;
+        }
+
+        ref Player player = ref players.GetItem(input.PlayerID);
+
+        player.input_direction.X = MathGen.GetAxis<float>(input.IsRightPressed, input.IsLeftPressed);
+        player.input_direction.Y = MathGen.GetAxis<float>(input.IsDownPressed, input.IsUpPressed);
+    }
+
+    public float GetTeamCoverage(Team team)
+    {
+        uint total_tiles = game_state.grid_width * game_state.grid_height;
+        float max_coverage = GameRules.MAX_PAINT_STRENGTH * total_tiles;
+
+        if (max_coverage <= 0.0f)
+        {
+            return 0.0f;
+        }
+
+        float team_coverage = 0.0f;
+        for (uint idx = 0; idx < total_tiles; ++idx)
+        {
+            ref Tile tile = ref game_state.grid[idx];
+
+            if (tile.team == team)
+            {
+                team_coverage += tile.strength;
+            }
+        }
+
+        return team_coverage / max_coverage;
+    }
+
+    public uint AddNewPlayer()
+    {
+        Team player_team;
+
+        if (red_team_player_count < blue_team_player_count)
+        {
+            player_team = Team.RED_TEAM;
+            ++red_team_player_count;
+        }
+        else
+        {
+            player_team = Team.BLUE_TEAM;
+            ++blue_team_player_count;
+        }
+
+        Player new_player = new(player_team, new());
+        move_system.PickPlayerSpawn(ref new_player);
+
+        return players.AddItem(new_player);
+    }
+
+    public void RemovePlayer(uint id) => players.RemoveItem(id);
 }

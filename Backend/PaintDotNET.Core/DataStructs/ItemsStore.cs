@@ -23,7 +23,9 @@ public class ItemsStore<T>
     private readonly Dictionary<ItemID, int> id_to_index = [];
     private readonly Dictionary<int, ItemID> index_to_id = [];
 
-    public ItemID AddItem(T player)
+    public ItemID GetNextItemID() => next_item_id;
+
+    public ItemID AddItem(T item)
     {
         ItemID id = next_item_id++;
         int index = items.Count;
@@ -31,7 +33,7 @@ public class ItemsStore<T>
         id_to_index[id] = index;
         index_to_id[index] = id;
 
-        items.Add(player);
+        items.Add(item);
 
         return id;
     }
