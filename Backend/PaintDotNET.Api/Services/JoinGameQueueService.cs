@@ -1,4 +1,5 @@
 using System.Threading.Channels;
+using PaintDotNET.Core.Meta;
 
 namespace PaintDotNET.Api.Services;
 
@@ -11,7 +12,7 @@ public enum JoinResultStatus
 
 public record JoinResult(
     JoinResultStatus Status,
-    uint PlayerID
+    PlayerAddData PlayerData
 );
 
 public record JoinRequest(

@@ -116,7 +116,7 @@ public class GameSession
         return team_coverage / max_coverage;
     }
 
-    public uint AddNewPlayer()
+    public PlayerAddData AddNewPlayer()
     {
         Team player_team;
 
@@ -134,7 +134,13 @@ public class GameSession
         Player new_player = new(player_team, new());
         move_system.PickPlayerSpawn(ref new_player);
 
-        return players.AddItem(new_player);
+        uint player_id = players.AddItem(new_player);
+
+        return new(
+            player_id,
+            new_player.position,
+            player_team
+        );
     }
 
     public void RemovePlayer(uint id) => players.RemoveItem(id);

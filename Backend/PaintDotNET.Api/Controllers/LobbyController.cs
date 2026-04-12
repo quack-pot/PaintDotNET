@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PaintDotNET.Api.DTOs;
 using PaintDotNET.Api.Services;
 
 namespace PaintDotNET.Api.Controllers;
@@ -26,7 +27,15 @@ public class LobbyController(
 
             return join_task.Result.Status switch
             {
-                JoinResultStatus.SUCCESS => StatusCode(StatusCodes.Status200OK, join_task.Result),
+                JoinResultStatus.SUCCESS => StatusCode(
+                    StatusCodes.Status200OK,
+                    new JoinGameResultDTO(
+                        join_task.Result.PlayerData.PlayerID,
+                        join_task.Result.PlayerData.InitialPosition.X,
+                        join_task.Result.PlayerData.InitialPosition.Y,
+                        join_task.Result.PlayerData.PlayerTeam == Core.Enums.Team.RED_TEAM
+                    )
+                ),
                 JoinResultStatus.GAME_NOT_FOUND => StatusCode(StatusCodes.Status404NotFound, "Could not find game with given id."),
                 _ => StatusCode(StatusCodes.Status500InternalServerError, "Internal server error."),
             };
