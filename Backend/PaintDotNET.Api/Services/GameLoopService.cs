@@ -208,8 +208,11 @@ public class GameLoopService(
                 _ = proxy.SendAsync(
                     GameHubEvents.GAME_UPDATE,
                     new GameUpdateDTO(
-                        game.Session.GetGameTime()
-                    ) // TODO: This should send something, only if changes are available...
+                        game.Session.GetGameTime(),
+                        
+                        game.Session.GetTeamCoverage(Core.Enums.Team.RED_TEAM),
+                        game.Session.GetTeamCoverage(Core.Enums.Team.BLUE_TEAM)
+                    )
                 );
 
                 continue;

@@ -11,5 +11,5 @@ public class GameRules
     public const uint TILE_GRID_WIDTH = 32u;
     public const uint TILE_GRID_HEIGHT = 32u;
 
-    public const uint GAME_TIME_SECS = 3u;
+    public const uint GAME_TIME_SECS = 60u;
 }

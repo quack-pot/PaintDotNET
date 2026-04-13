@@ -203,6 +203,9 @@ async function main(): Promise<void> {
         const secs: number = Math.floor(dto.gameTimeSecs % 60);
         game_hud_time.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
 
+        game_hud_red_percent.textContent = `Red: ${Math.round(dto.redTeamCoverage * 100)}%`;
+        game_hud_blue_percent.textContent = `Blue: ${Math.round(dto.blueTeamCoverage * 100)}%`;
+
         // TODO: Update the game's state
     });
 
