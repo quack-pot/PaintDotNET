@@ -23,6 +23,8 @@ public class ItemsStore<T>
     private readonly Dictionary<ItemID, int> id_to_index = [];
     private readonly Dictionary<int, ItemID> index_to_id = [];
 
+    public int Count => items.Count;
+
     public ItemID GetNextItemID() => next_item_id;
 
     public ItemID AddItem(T item)

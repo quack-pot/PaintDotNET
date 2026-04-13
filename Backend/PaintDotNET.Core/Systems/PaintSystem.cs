@@ -9,7 +9,7 @@ public class PaintSystem(GameState injected_game_state, ItemsStore<Player> injec
     private readonly GameState game_state = injected_game_state;
     private readonly ItemsStore<Player> players = injected_players;
 
-    public void UpdatePainting(float delta_time)
+    public void UpdatePainting(float delta_time, List<TileUpdateData> tile_updates)
     {
         foreach (ref Player player in players)
         {
@@ -44,6 +44,13 @@ public class PaintSystem(GameState injected_game_state, ItemsStore<Player> injec
                 tile.team = player.team;
                 tile.strength = 1;
             }
+
+            tile_updates.Add(new(
+                tile.team == Enums.Team.RED_TEAM,
+                tile.strength,
+                grid_x,
+                grid_y
+            ));
         }
     }
 }

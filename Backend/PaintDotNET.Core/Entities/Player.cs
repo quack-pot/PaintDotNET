@@ -3,8 +3,9 @@ using PaintDotNET.Core.Math;
 
 namespace PaintDotNET.Core.Entities;
 
-public struct Player(Team player_team, in Vec2 initial_position)
+public struct Player(uint player_id, Team player_team, in Vec2 initial_position)
 {
+    public readonly uint id = player_id;
     public readonly Team team = player_team != Team.NONE
         ? player_team
         : throw new ArgumentException(nameof(player_team), "Cannot be assigned to NONE team value.");

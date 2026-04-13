@@ -11,7 +11,7 @@ public class MovementSystem(GameState injected_game_state, ItemsStore<Player> in
     private readonly GameState game_state = injected_game_state;
     private readonly ItemsStore<Player> players = injected_players;
 
-    public void UpdatePlayers(float delta_time)
+    public void UpdatePlayers(float delta_time, List<PlayerUpdateData> player_updates)
     {
         float frame_speed = GameRules.PLAYER_MOVE_SPEED * delta_time;
 
@@ -29,6 +29,8 @@ public class MovementSystem(GameState injected_game_state, ItemsStore<Player> in
                 GameRules.PLAYER_SIZE_RADIUS,
                 upper_y
             );
+
+            player_updates.Add(new(player.id, player.position.X, player.position.Y));
         }
     }
 

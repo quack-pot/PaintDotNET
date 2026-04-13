@@ -123,7 +123,8 @@ public class GameLoopService(
                         IClientProxy proxy = hub_ctx.Clients.Group(game.ClientGroupID);
                         await proxy.SendAsync(GameHubEvents.GAME_STARTED, new GameStartedDTO(
                             game.Session.GetGridWidth(),
-                            game.Session.GetGridHeight()
+                            game.Session.GetGridHeight(),
+                            game.Session.GetPlayerInitialValues()
                         ));
 
                         req.Response.TrySetResult(new(GameStateResultStatus.SUCCESS, 0u, new()));
@@ -211,7 +212,11 @@ public class GameLoopService(
                         game.Session.GetGameTime(),
                         
                         game.Session.GetTeamCoverage(Core.Enums.Team.RED_TEAM),
-                        game.Session.GetTeamCoverage(Core.Enums.Team.BLUE_TEAM)
+                        game.Session.GetTeamCoverage(Core.Enums.Team.BLUE_TEAM),
+
+                        game.Session.GetTileUpdates(),
+                        game.Session.GetJoinUpdates(),
+                        game.Session.GetPlayerUpdates()
                     )
                 );
 

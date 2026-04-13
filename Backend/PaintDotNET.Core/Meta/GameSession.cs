@@ -21,6 +21,10 @@ public class GameSession
 
     private uint red_team_player_count = 0u;
     private uint blue_team_player_count = 0u;
+    
+    private readonly List<TileUpdateData> tile_updates = [];
+    private readonly List<PlayerJoinData> join_updates = [];
+    private readonly List<PlayerUpdateData> player_updates = [];
 
     private bool is_running = false;
 
@@ -72,8 +76,8 @@ public class GameSession
         float delta_time = current_frame_time - last_frame_time;
         last_frame_time = current_frame_time;
 
-        move_system.UpdatePlayers(delta_time);
-        paint_system.UpdatePainting(delta_time);
+        move_system.UpdatePlayers(delta_time, player_updates);
+        paint_system.UpdatePainting(delta_time, tile_updates);
         clock_system.TickGameClock(delta_time);
 
         is_running = clock_system.IsGameStillGoing();
@@ -132,10 +136,18 @@ public class GameSession
             ++blue_team_player_count;
         }
 
-        Player new_player = new(player_team, new());
+        Player new_player = new(players.GetNextItemID(), player_team, new());
         move_system.PickPlayerSpawn(ref new_player);
 
         uint player_id = players.AddItem(new_player);
+
+        join_updates.Add(new(
+            player_id,
+            new_player.position.X,
+            new_player.position.Y,
+            false,
+            player_team == Team.RED_TEAM
+        ));
 
         return new(
             player_id,
@@ -144,10 +156,61 @@ public class GameSession
         );
     }
 
-    public void RemovePlayer(uint id) => players.RemoveItem(id);
+    public void RemovePlayer(uint id) {
+        players.RemoveItem(id);
+        join_updates.Add(new(id, 0.0f, 0.0f, true, false));
+    }
 
     public uint GetGridWidth() => game_state.grid_width;
     public uint GetGridHeight() => game_state.grid_height;
 
     public float GetGameTime() => game_state.game_time_secs;
+
+    public TileUpdateData[] GetTileUpdates()
+    {
+        TileUpdateData[] updates = [.. tile_updates];
+        tile_updates.Clear();
+
+        return updates;
+    }
+
+    public PlayerJoinData[] GetJoinUpdates()
+    {
+        PlayerJoinData[] updates = [.. join_updates];
+        join_updates.Clear();
+
+        return updates;
+    }
+
+    public PlayerUpdateData[] GetPlayerUpdates()
+    {
+        PlayerUpdateData[] updates = [.. player_updates];
+        player_updates.Clear();
+
+        return updates;
+    }
+
+    public PlayerJoinData[] GetPlayerInitialValues()
+    {
+        if (players.Count == 0)
+        {
+            return [];
+        }
+
+        PlayerJoinData[] initial_values = new PlayerJoinData[players.Count];
+
+        int idx = 0;
+        foreach (ref Player player in players)
+        {
+            initial_values[idx++] = new(
+                player.id,
+                player.position.X,
+                player.position.Y,
+                false,
+                player.team == Team.RED_TEAM
+            );
+        }
+
+        return initial_values;
+    }
 }

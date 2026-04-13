@@ -13,7 +13,7 @@ import type EndGameDTO from "./dto/end_game_dto";
 import type GameUpdateDTO from "./dto/game_update_dto";
 import type GameStartedDTO from "./dto/game_started_dto";
 
-const PLAYER_INPUT_POLL_TIME_MS: number = 150;
+const PLAYER_INPUT_POLL_TIME_MS: number = 30;
 
 const PRIMARY_UI_MANAGER_ID: string = "primary-ui-manager";
 const PRIMARY_GAME_CANVAS_ID: string = "primary-game-canvas";
@@ -191,6 +191,31 @@ async function main(): Promise<void> {
         player_input.gameID = game_id;
         player_input.playerID = player_id;
 
+        player_input.isUpPressed = false;
+        player_input.isDownPressed = false;
+        player_input.isLeftPressed = false;
+        player_input.isRightPressed = false;
+
+        for (const join_data of dto.playerInitialValues) {
+            if (join_data.playerID === player_id) {
+                game_canvas.updatePlayerTeam(join_data.isRedTeam);
+                game_canvas.updatePlayerPosition(join_data.xPosition, join_data.yPosition);
+                continue;
+            }
+
+            if (join_data.isLeaving) {
+                game_canvas.removeOtherPlayer(join_data.playerID);
+                continue;
+            }
+
+            game_canvas.addOtherPlayer(
+                join_data.playerID,
+                join_data.isRedTeam,
+                join_data.xPosition,
+                join_data.yPosition
+            );
+        }
+
         game_canvas.resetGrid(dto.gridWidth, dto.gridHeight);
     });
 
@@ -205,8 +230,46 @@ async function main(): Promise<void> {
 
         game_hud_red_percent.textContent = `Red: ${Math.round(dto.redTeamCoverage * 100)}%`;
         game_hud_blue_percent.textContent = `Blue: ${Math.round(dto.blueTeamCoverage * 100)}%`;
+        
+        for (const tile_update of dto.tileUpdates) {
+            game_canvas.updateTile(
+                tile_update.xIndex,
+                tile_update.yIndex,
+                tile_update.isRedTeam,
+                tile_update.strength
+            );
+        }
 
-        // TODO: Update the game's state
+        for (const join_data of dto.joinData) {
+            if (join_data.playerID === player_id) {
+                continue;
+            }
+
+            if (join_data.isLeaving) {
+                game_canvas.removeOtherPlayer(join_data.playerID);
+                continue;
+            }
+
+            game_canvas.addOtherPlayer(
+                join_data.playerID,
+                join_data.isRedTeam,
+                join_data.xPosition,
+                join_data.yPosition
+            );
+        }
+
+        for (const player_update of dto.playerUpdates) {
+            if (player_update.playerID === player_id) {
+                game_canvas.updatePlayerPosition(player_update.xPosition, player_update.yPosition);
+                continue;
+            }
+
+            game_canvas.updateOtherPlayer(
+                player_update.playerID,
+                player_update.xPosition,
+                player_update.yPosition
+            );
+        }
     });
 
     signal_manager.registerCallback(SignalName.GAME_OVER, (dto: GameOverDTO) => {
@@ -282,7 +345,7 @@ async function main(): Promise<void> {
         }
     });
 
-    setTimeout(() => {
+    setInterval(() => {
         if (ui_manager.getState() !== UIState.GAME_HUD) {
             return;
         }

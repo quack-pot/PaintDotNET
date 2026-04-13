@@ -162,8 +162,8 @@ export default class GameCanvas extends HTMLElement {
         }
 
         const player: THREE.Mesh = this.other_players[index];
-        player.position.setX(new_x * TILE_SIZE);
-        player.position.setZ(new_y * TILE_SIZE);
+        player.position.setX(((new_x - 0.5) * TILE_SIZE));
+        player.position.setZ(((new_y - 0.5) * TILE_SIZE));
     }
 
     public updatePlayerTeam(is_red_team: boolean): void {
@@ -173,8 +173,8 @@ export default class GameCanvas extends HTMLElement {
     }
 
     public updatePlayerPosition(x_position: number, y_position: number): void {
-        this.player.position.setX(x_position * TILE_SIZE);
-        this.player.position.setZ(y_position * TILE_SIZE);
+        this.player.position.setX((x_position - 0.5) * TILE_SIZE);
+        this.player.position.setZ((y_position - 0.5) * TILE_SIZE);
     }
 
     public updateTile(x_idx: number, y_idx: number, is_red_team: boolean, strength: number): void {
@@ -211,6 +211,8 @@ export default class GameCanvas extends HTMLElement {
                 break;
             }
         }
+
+        this.tile_grid.instanceColor!.needsUpdate = true;
     }
 
     public resetGrid(width: number, height: number): void {
@@ -268,12 +270,15 @@ export default class GameCanvas extends HTMLElement {
             }
 
             this.tile_grid.instanceMatrix.needsUpdate = true;
+            this.tile_grid.instanceColor!.needsUpdate = true;
             return;
         }
 
         for (let idx: number = 0; idx < total_tiles; ++idx) {
             this.tile_grid.setColorAt(idx, new THREE.Color(PAINT_LEVEL_ZERO));
         }
+
+        this.tile_grid.instanceColor!.needsUpdate = true;
     }
 
     private onResize(): void {

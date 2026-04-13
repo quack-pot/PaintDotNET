@@ -21,7 +21,10 @@ public class GameHub(
 {
     private readonly GameLoopService game_loop_service = injected_game_loop_service;
 
-    public async Task SendInput(PlayerInputDTO input) => game_loop_service.QueuePlayerInput(input);
+    public async Task SendInput(PlayerInputDTO input)
+    {
+        game_loop_service.QueuePlayerInput(input);
+    }
 
     public async Task JoinGroup(string game_client_id) => await Groups.AddToGroupAsync(Context.ConnectionId, game_client_id);
     public async Task LeaveGroup(string game_client_id) => await Groups.RemoveFromGroupAsync(Context.ConnectionId, game_client_id);

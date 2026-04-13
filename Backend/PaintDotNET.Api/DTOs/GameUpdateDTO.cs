@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using PaintDotNET.Core.Meta;
 
 namespace PaintDotNET.Api.DTOs;
 
@@ -6,5 +7,9 @@ public record GameUpdateDTO(
     [Required][Range(0.0f, 3600.0f)] float GameTimeSecs,
 
     [Required][Range(0.0f, 1.0f)] float RedTeamCoverage,
-    [Required][Range(0.0f, 1.0f)] float BlueTeamCoverage
+    [Required][Range(0.0f, 1.0f)] float BlueTeamCoverage,
+
+    [Required] TileUpdateData[] TileUpdates,
+    [Required] PlayerJoinData[] JoinData,
+    [Required] PlayerUpdateData[] PlayerUpdates
 );
