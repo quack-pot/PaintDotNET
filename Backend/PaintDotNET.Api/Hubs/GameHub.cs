@@ -8,14 +8,16 @@ public static class GameHubEvents
 {
     public const string GAME_UPDATE = "GameUpdate";
     public const string GAME_OVER = "GameOver";
+    public const string GAME_STARTED = "GameStarted";
+    public const string GAME_END = "GameEnded";
+    public const string PLAYER_INPUT = "SendInput";
 }
 
-public class GameHub(GameService injected_game_service) : Hub
+public class GameHub(
+    GameLoopService injected_game_loop_service
+) : Hub
 {
-    private readonly GameService game_service = injected_game_service;
+    private readonly GameLoopService game_loop_service = injected_game_loop_service;
 
-    public async Task SendInput(PlayerInputDTO input)
-    {
-        
-    }
+    public async Task SendInput(PlayerInputDTO input) => game_loop_service.QueuePlayerInput(input);
 }

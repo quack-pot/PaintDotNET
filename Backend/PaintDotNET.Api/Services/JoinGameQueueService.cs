@@ -6,8 +6,10 @@ namespace PaintDotNET.Api.Services;
 public enum JoinResultStatus
 {
     SUCCESS,
-    INTERNAL_ERROR,
-    GAME_NOT_FOUND
+    HOST_CANNOT_LEAVE,
+    GAME_NOT_FOUND,
+    
+    INTERNAL_ERROR
 }
 
 public record JoinResult(

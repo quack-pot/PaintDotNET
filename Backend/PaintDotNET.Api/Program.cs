@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<GamesRepo>();
 
+builder.Services.AddSingleton<GameStateQueueService>();
 builder.Services.AddSingleton<JoinGameQueueService>();
 builder.Services.AddHostedService<GameLoopService>();
 
