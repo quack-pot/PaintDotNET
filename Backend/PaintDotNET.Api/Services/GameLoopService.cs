@@ -121,9 +121,13 @@ public class GameLoopService(
                         game.Session.StartGame();
 
                         IClientProxy proxy = hub_ctx.Clients.Group(game.ClientGroupID);
-                        await proxy.SendAsync(GameHubEvents.GAME_STARTED);
+                        await proxy.SendAsync(GameHubEvents.GAME_STARTED, new GameStartedDTO(
+                            game.Session.GetGridWidth(),
+                            game.Session.GetGridHeight()
+                        ));
 
-                        break;
+                        req.Response.TrySetResult(new(GameStateResultStatus.SUCCESS, 0u, new()));
+                        return;
                     }
 
                     default: { throw new Exception("Unknown game state request type."); }
@@ -203,7 +207,9 @@ public class GameLoopService(
             {
                 _ = proxy.SendAsync(
                     GameHubEvents.GAME_UPDATE,
-                    new GameUpdateDTO() // TODO: This should send something, only if changes are available...
+                    new GameUpdateDTO(
+                        game.Session.GetGameTime()
+                    ) // TODO: This should send something, only if changes are available...
                 );
 
                 continue;

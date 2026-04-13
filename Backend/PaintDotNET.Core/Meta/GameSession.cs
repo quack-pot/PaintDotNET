@@ -57,6 +57,7 @@ public class GameSession
         }
 
         last_frame_time = 0.0f;
+        stopwatch.Reset();
         stopwatch.Start();
     }
 
@@ -144,4 +145,9 @@ public class GameSession
     }
 
     public void RemovePlayer(uint id) => players.RemoveItem(id);
+
+    public uint GetGridWidth() => game_state.grid_width;
+    public uint GetGridHeight() => game_state.grid_height;
+
+    public float GetGameTime() => game_state.game_time_secs;
 }

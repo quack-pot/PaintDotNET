@@ -6,7 +6,9 @@ export enum SignalName {
     GAME_OVER = "GameOver",
     GAME_STARTED = "GameStarted",
     GAME_END = "GameEnded",
-    PLAYER_INPUT = "SendInput"
+    PLAYER_INPUT = "SendInput",
+    JOIN_GROUP = "JoinGroup",
+    LEAVE_GROUP = "LeaveGroup"
 };
 
 export type SignalCallback = (...args: any) => any;

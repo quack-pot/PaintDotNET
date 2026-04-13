@@ -36,7 +36,7 @@ public class MovementSystem(GameState injected_game_state, ItemsStore<Player> in
     {
         player.position.Y = Random.Shared.NextSingle() * game_state.grid_height;
 
-        float half_grid_width = 0.5f * game_state.grid_width;
+        float half_grid_width = 0.5f * (game_state.grid_width - 1.0f);
         player.position.X = Random.Shared.NextSingle() * half_grid_width;
 
         if (player.team == Team.BLUE_TEAM)

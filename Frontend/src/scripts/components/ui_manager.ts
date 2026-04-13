@@ -41,7 +41,7 @@ export default class UIManager extends HTMLElement {
         for (let idx: number = 0; idx < this.panels.length; ++idx) {
             const panel: UIPanel = this.panels[idx];
 
-            if (new_state == panel.state) {
+            if (new_state === panel.state) {
                 panel.element.style.removeProperty("display");
                 continue;
             }

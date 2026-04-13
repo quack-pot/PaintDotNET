@@ -14,12 +14,14 @@ public class LobbyController(
     private readonly GameStateQueueService state_queue = injected_state_queue;
     private readonly JoinGameQueueService join_queue = injected_join_queue;
 
+    private const int GAME_TICK_WAIT_TIME = 20;
+
     [HttpPost("create")]
     public async Task<IActionResult> CreateNewGame(
         CancellationToken cancel_token
     ) {
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancel_token);
-        cts.CancelAfter(GameLoopService.TickRate * 10);
+        cts.CancelAfter(GameLoopService.TickRate * GAME_TICK_WAIT_TIME);
 
         try
         {
@@ -54,7 +56,7 @@ public class LobbyController(
         CancellationToken cancel_token
     ) {
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancel_token);
-        cts.CancelAfter(GameLoopService.TickRate * 10);
+        cts.CancelAfter(GameLoopService.TickRate * GAME_TICK_WAIT_TIME);
 
         try
         {
@@ -82,7 +84,7 @@ public class LobbyController(
         CancellationToken cancel_token
     ) {
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancel_token);
-        cts.CancelAfter(GameLoopService.TickRate * 10);
+        cts.CancelAfter(GameLoopService.TickRate * GAME_TICK_WAIT_TIME);
 
         try
         {
@@ -110,7 +112,7 @@ public class LobbyController(
         CancellationToken cancel_token
     ) {
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancel_token);
-        cts.CancelAfter(GameLoopService.TickRate * 10);
+        cts.CancelAfter(GameLoopService.TickRate * GAME_TICK_WAIT_TIME);
 
         try
         {
@@ -145,7 +147,7 @@ public class LobbyController(
         CancellationToken cancel_token
     ) {
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancel_token);
-        cts.CancelAfter(GameLoopService.TickRate * 10);
+        cts.CancelAfter(GameLoopService.TickRate * GAME_TICK_WAIT_TIME);
 
         try
         {
