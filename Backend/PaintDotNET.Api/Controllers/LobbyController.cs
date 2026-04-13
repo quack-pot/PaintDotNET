@@ -14,7 +14,7 @@ public class LobbyController(
     private readonly GameStateQueueService state_queue = injected_state_queue;
     private readonly JoinGameQueueService join_queue = injected_join_queue;
 
-    [HttpPost("/create")]
+    [HttpPost("create")]
     public async Task<IActionResult> CreateNewGame(
         CancellationToken cancel_token
     ) {
@@ -47,7 +47,7 @@ public class LobbyController(
         }
     }
 
-    [HttpDelete("/end/{GameID}")]
+    [HttpDelete("end/{GameID}")]
     public async Task<IActionResult> EndGame(
         uint GameID,
         [FromBody] EndGameDTO dto,
@@ -75,7 +75,7 @@ public class LobbyController(
         }
     }
 
-    [HttpPut("/start/{GameID}")]
+    [HttpPut("start/{GameID}")]
     public async Task<IActionResult> StartGame(
         uint GameID,
         [FromBody] StartGameDTO dto,
@@ -104,7 +104,7 @@ public class LobbyController(
         }
     }
 
-    [HttpPut("/join/{GameID}")]
+    [HttpPut("join/{GameID}")]
     public async Task<IActionResult> JoinGame(
         uint GameID,
         CancellationToken cancel_token
@@ -138,7 +138,7 @@ public class LobbyController(
         }
     }
 
-    [HttpPut("/leave/{GameID}/{PlayerID}")]
+    [HttpPut("leave/{GameID}/{PlayerID}")]
     public async Task<IActionResult> LeaveGame(
         uint GameID,
         uint PlayerID,
