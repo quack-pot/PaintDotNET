@@ -74,4 +74,5 @@ public class ItemsStore<T>
     }
 
     public ItemsStoreEnumerator<T> GetEnumerator() => new(CollectionsMarshal.AsSpan(items));
+    public IEnumerable<T> AsEnumerable() => items.AsEnumerable();
 }

@@ -1,6 +1,7 @@
+import getElementById from "./utils/dom";
 import UIManager from "./components/ui_manager";
 import GameCanvas from "./components/game_canvas";
-import getElementById from "./utils/dom";
+import SignalManager from "./server/signal_manager";
 
 const PRIMARY_UI_MANAGER_ID: string = "primary-ui-manager";
 const PRIMARY_GAME_CANVAS_ID: string = "primary-game-canvas";
@@ -34,7 +35,7 @@ const GAME_HUD_RED_PERCENT_ID: string = "game-hud-red-percent";
 const GAME_HUD_BLUE_PERCENT_ID: string = "game-hud-blue-percent";
 const GAME_HUD_TIME_ID: string = "game-hud-time";
 
-function main(): void {
+async function main(): Promise<void> {
     const ui_manager: UIManager = getElementById(PRIMARY_UI_MANAGER_ID);
     const game_canvas: GameCanvas = getElementById(PRIMARY_GAME_CANVAS_ID);
 
@@ -66,6 +67,12 @@ function main(): void {
     const game_hud_red_percent: HTMLElement = getElementById(GAME_HUD_RED_PERCENT_ID);
     const game_hud_blue_percent: HTMLElement = getElementById(GAME_HUD_BLUE_PERCENT_ID);
     const game_hud_time: HTMLElement = getElementById(GAME_HUD_TIME_ID);
+
+    const signal_manager: SignalManager = new SignalManager("/game");
+
+    
+
+    await signal_manager.start();
 }
 
 document.addEventListener("DOMContentLoaded", main);

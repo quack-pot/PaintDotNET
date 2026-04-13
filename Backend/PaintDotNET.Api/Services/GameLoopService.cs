@@ -37,7 +37,7 @@ public class GameLoopService(
 
             await DrainGameStateQueue();
             DrainJoinQueue();
-            await UpdateGames();
+            UpdateGames();
 
             TimeSpan delay = TickRate - (DateTime.UtcNow - frame_start);
             if (delay > TimeSpan.Zero)
@@ -174,7 +174,7 @@ public class GameLoopService(
         }
     }
 
-    private async Task UpdateGames()
+    private void UpdateGames()
     {
         while (input_queue.TryDequeue(out var dto))
         {
@@ -201,7 +201,7 @@ public class GameLoopService(
 
             if (game.Session.AttemptUpdate())
             {
-                await proxy.SendAsync(
+                _ = proxy.SendAsync(
                     GameHubEvents.GAME_UPDATE,
                     new GameUpdateDTO() // TODO: This should send something, only if changes are available...
                 );
@@ -209,7 +209,7 @@ public class GameLoopService(
                 continue;
             }
 
-            await proxy.SendAsync(
+            _ = proxy.SendAsync(
                 GameHubEvents.GAME_OVER,
                 new GameOverDTO(
                     game.Session.GetTeamCoverage(Core.Enums.Team.RED_TEAM),

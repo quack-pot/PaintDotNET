@@ -21,4 +21,5 @@ public class GamesRepo
     public ref Game GetGame(uint id) => ref games.GetItem(id);
 
     public ItemsStoreEnumerator<Game> GetEnumerator() => games.GetEnumerator();
+    public IEnumerable<Game> AsEnumerable() => games.AsEnumerable();
 }
