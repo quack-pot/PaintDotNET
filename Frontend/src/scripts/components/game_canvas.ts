@@ -278,6 +278,7 @@ export default class GameCanvas extends HTMLElement {
             this.tile_grid.setColorAt(idx, new THREE.Color(PAINT_LEVEL_ZERO));
         }
 
+        this.tile_grid.instanceMatrix.needsUpdate = true;
         this.tile_grid.instanceColor!.needsUpdate = true;
     }
 

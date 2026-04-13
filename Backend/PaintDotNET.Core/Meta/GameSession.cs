@@ -55,6 +55,14 @@ public class GameSession
 
         game_state.game_time_secs = GameRules.GAME_TIME_SECS;
 
+        uint tile_count = game_state.grid_width * game_state.grid_height;
+        for (uint idx = 0; idx < tile_count; ++idx)
+        {
+            ref Tile tile = ref game_state.grid[idx];
+            tile.team = Team.NONE;
+            tile.strength = 0;
+        }
+
         foreach (ref Player player in players)
         {
             move_system.PickPlayerSpawn(ref player);
